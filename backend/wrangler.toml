@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 JWT_SECRET = "trevotour_jwt_secret_change_in_production"
 JWT_EXPIRES_IN = "7d"
-CORS_ORIGIN = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
+CORS_ORIGIN = "https://crmtrevo.pages.dev,http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
 
 [[d1_databases]]
 binding = "DB"
