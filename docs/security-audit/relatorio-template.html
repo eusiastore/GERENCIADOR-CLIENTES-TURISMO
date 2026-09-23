@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório de Auditoria de Segurança — TrevoTour</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 16mm 14mm 18mm 14mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      font-size: 9.5pt;
+      line-height: 1.55;
+    }
+
+    /* Page Breaks */
+    .page-break { page-break-after: always; }
+    .avoid-break { page-break-inside: avoid; }
+
+    /* Header & Footer */
+    .doc-header {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-header .brand {
+      font-size: 10.5pt;
+      font-weight: 800;
+      color: #ea580c;
+      letter-spacing: -0.02em;
+    }
+    .doc-header .doc-type {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Cover Page */
+    .cover-container {
+      min-height: 240mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 10px 10px 10px;
+    }
+
+    .cover-brand-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ea580c, #f97316);
+      color: white;
+      font-size: 16pt;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-size: 24pt;
+      font-weight: 900;
+      line-height: 1.15;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .cover-subtitle {
+      font-size: 12pt;
+      color: #475569;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+
+    .cover-meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #ea580c;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .cover-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      font-size: 8.5pt;
+    }
+
+    .meta-item strong { color: #0f172a; display: block; font-size: 7.5pt; text-transform: uppercase; color: #64748b; margin-bottom: 2px; }
+    .meta-item span { color: #1e293b; font-weight: 600; }
+
+    .methodology-box {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 8.2pt;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .methodology-box h4 {
+      font-size: 9pt;
+      color: #0f172a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Typography & Sections */
+    h2.section-title {
+      font-size: 14pt;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 5px;
+      margin-top: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p { margin-bottom: 8px; }
+
+    /* Badges & Chips */
+    .chip {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .chip-critica { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+    .chip-alta    { background: #ffedd5; color: #ea580c; border: 1px solid #fb923c; }
+    .chip-media   { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
+    .chip-baixa   { background: #dbeafe; color: #2563eb; border: 1px solid #93c5fd; }
+    .chip-forte   { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+
+    /* Executive Charts & Metrics */
+    .metrics-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 15pt;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .metric-label {
+      font-size: 7pt;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .chart-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .chart-title {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    /* Tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      margin-bottom: 14px;
+    }
+
+    table.data-table th {
+      background: #0f172a;
+      color: #ffffff;
+      text-align: left;
+      padding: 6px 8px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    table.data-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    table.data-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Finding Detail Card */
+    .finding-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #ea580c;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      page-break-inside: avoid;
+    }
+
+    .finding-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .finding-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .code-snippet {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 7pt;
+      padding: 6px 8px;
+      border-radius: 4px;
+      margin: 5px 0;
+      overflow-x: auto;
+      line-height: 1.35;
+    }
+
+    .finding-field {
+      font-size: 8pt;
+      margin-bottom: 3px;
+    }
+    .finding-field strong { color: #334155; }
+
+    /* Strengths & Weaknesses */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .box-green {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 8pt;
+    }
+    .box-green h4 { color: #059669; font-size: 9pt; margin-bottom: 4px; }
+
+    .box-red {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 8pt;
+    }
+    .box-red h4 { color: #b91c1c; font-size: 9pt; margin-bottom: 4px; }
+
+    /* GitHub Issue Box */
+    .issue-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+
+    .issue-box pre {
+      white-space: pre-wrap;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 7pt;
+      color: #1e293b;
+      line-height: 1.4;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== CAPA ==================== -->
+  <div class="cover-container page-break">
+    <div>
+      <div class="cover-brand-badge">🍀 TREVOTOUR</div>
+      <h1 class="cover-title">Relatório de Auditoria de Segurança</h1>
+      <div class="cover-subtitle">Avaliação de Código-Fonte, Controle de Acesso, Superfície de Ataque e Riscos de Dados</div>
+
+      <div class="cover-meta-card">
+        <div class="cover-meta-grid">
+          <div class="meta-item">
+            <strong>Projeto Auditado</strong>
+            <span>TrevoTour — Gestão de Excursões</span>
+          </div>
+          <div class="meta-item">
+            <strong>Data da Avaliação</strong>
+            <span>11 de Setembro de 2026</span>
+          </div>
+          <div class="meta-item">
+            <strong>Escopo</strong>
+            <span>APIs PHP (Backend), Banco MySQL 8.0, Frontend React/Vite</span>
+          </div>
+          <div class="meta-item">
+            <strong>Classificação Geral</strong>
+            <span style="color: #ea580c; font-weight: 800;">Risco Moderado (2 Altas, 3 Médias, 2 Baixas)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="methodology-box">
+        <h4>📌 Nota Metodológica e Mapeamento da Stack</h4>
+        <p>A auditoria avaliou a base de código do TrevoTour cobrindo cinco categorias fundamentais de segurança adaptadas à stack real do projeto (<strong>PHP 8.2 puro com PDO</strong>, <strong>MySQL 8.0</strong>, <strong>React 18 / Vite SPA</strong> e <strong>Sessões Nativas PHP com Cookies HttpOnly</strong>):</p>
+        <ul style="margin-left: 18px; line-height: 1.45; margin-top: 4px;">
+          <li><strong>1. Banco sem Tranca (Isolamento):</strong> Validação de modelo Single-Tenant e rastreabilidade/propriedade de registros operacionais.</li>
+          <li><strong>2. Permissão Definida no Navegador:</strong> Confronto entre ocultação de UI no React e validação de <code>Auth::requireRole('admin')</code> nos controladores PHP.</li>
+          <li><strong>3. IDOR:</strong> Verificação de manipulação arbitrária de IDs em rotas de atualização/deleção.</li>
+          <li><strong>4. Chaves Expostas (Hardcode):</strong> Identificação de senhas de banco fixas no código, logs em disco e mensagens de debug expostas.</li>
+          <li><strong>5. Inputs sem Tratamento (XSS / SQLi):</strong> Inspeção de JSX, interpolação de queries SQL e escape de saídas.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESUMO EXECUTIVO ==================== -->
+  <div class="page-break">
+    <div class="doc-header">
+      <span class="brand">TrevoTour Security Audit</span>
+      <span class="doc-type">Resumo Executivo</span>
+    </div>
+
+    <h2 class="section-title">📊 Resumo Executivo</h2>
+    <p>A auditoria identificou <strong>7 achados de segurança verificados</strong> na base de código. Não foram encontradas vulnerabilidades de severidade crítica (RCE ou bypass não autenticado de rotas), confirmando a eficácia da barreira central do middleware <code>Auth::requireAuth()</code>. Contudo, destacam-se falhas de <strong>severidade Alta</strong> referentes a credenciais de banco hardcoded e ausência de verificação de permissão administrativa para exclusão de viagens por usuários comuns.</p>
+
+    <!-- Métricas -->
+    <div class="metrics-container">
+      <div class="metric-card" style="border-top: 3px solid #b91c1c;">
+        <div class="metric-value" style="color: #b91c1c;">0</div>
+        <div class="metric-label">Crítica</div>
+      </div>
+      <div class="metric-card" style="border-top: 3px solid #ea580c;">
+        <div class="metric-value" style="color: #ea580c;">2</div>
+        <div class="metric-label">Alta</div>
+      </div>
+      <div class="metric-card" style="border-top: 3px solid #d97706;">
+        <div class="metric-value" style="color: #d97706;">3</div>
+        <div class="metric-label">Média</div>
+      </div>
+      <div class="metric-card" style="border-top: 3px solid #2563EB;">
+        <div class="metric-value" style="color: #2563EB;">2</div>
+        <div class="metric-label">Baixa</div>
+      </div>
+      <div class="metric-card" style="border-top: 3px solid #059669;">
+        <div class="metric-value" style="color: #059669;">4</div>
+        <div class="metric-label">Pontos Fortes</div>
+      </div>
+    </div>
+
+    <!-- Gráficos SVG -->
+    <div class="charts-row">
+      <!-- Gráfico de Rosca por Severidade -->
+      <div class="chart-box">
+        <div class="chart-title">Distribuição por Severidade</div>
+        <svg width="180" height="120" viewBox="0 0 180 120">
+          <circle cx="60" cy="60" r="42" fill="none" stroke="#f1f5f9" stroke-width="18" />
+          <!-- Alta: 2/7 (28.6%) -> stroke-dasharray="75.4 188.5" -->
+          <circle cx="60" cy="60" r="42" fill="none" stroke="#ea580c" stroke-width="18"
+                  stroke-dasharray="75.4 188.5" stroke-dashoffset="0" transform="rotate(-90 60 60)" />
+          <!-- Média: 3/7 (42.8%) -> stroke-dasharray="113.1 150.8" -->
+          <circle cx="60" cy="60" r="42" fill="none" stroke="#d97706" stroke-width="18"
+                  stroke-dasharray="113.1 150.8" stroke-dashoffset="-75.4" transform="rotate(-90 60 60)" />
+          <!-- Baixa: 2/7 (28.6%) -> stroke-dasharray="75.4 188.5" -->
+          <circle cx="60" cy="60" r="42" fill="none" stroke="#2563eb" stroke-width="18"
+                  stroke-dasharray="75.4 188.5" stroke-dashoffset="-188.5" transform="rotate(-90 60 60)" />
+          
+          <text x="60" y="58" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">7</text>
+          <text x="60" y="69" text-anchor="middle" font-size="6.5" fill="#64748b">ACHADOS</text>
+
+          <!-- Legenda -->
+          <rect x="120" y="28" width="7" height="7" fill="#ea580c" rx="2" />
+          <text x="132" y="34" font-size="7.5" fill="#334155">Alta (2)</text>
+          
+          <rect x="120" y="48" width="7" height="7" fill="#d97706" rx="2" />
+          <text x="132" y="54" font-size="7.5" fill="#334155">Média (3)</text>
+          
+          <rect x="120" y="68" width="7" height="7" fill="#2563eb" rx="2" />
+          <text x="132" y="74" font-size="7.5" fill="#334155">Baixa (2)</text>
+        </svg>
+      </div>
+
+      <!-- Gráfico de Barras por Categoria -->
+      <div class="chart-box">
+        <div class="chart-title">Achados por Categoria</div>
+        <svg width="220" height="120" viewBox="0 0 220 120">
+          <line x1="65" y1="18" x2="200" y2="18" stroke="#e2e8f0" stroke-width="1" />
+          <line x1="65" y1="42" x2="200" y2="42" stroke="#e2e8f0" stroke-width="1" />
+          <line x1="65" y1="66" x2="200" y2="66" stroke="#e2e8f0" stroke-width="1" />
+          <line x1="65" y1="90" x2="200" y2="90" stroke="#e2e8f0" stroke-width="1" />
+          <line x1="65" y1="114" x2="200" y2="114" stroke="#e2e8f0" stroke-width="1" />
+
+          <text x="60" y="22" text-anchor="end" font-size="6.5" font-weight="600" fill="#475569">RBAC Servidor</text>
+          <rect x="65" y="13" width="85" height="11" fill="#ea580c" rx="2" />
+          <text x="155" y="22" font-size="7" font-weight="bold" fill="#ea580c">2</text>
+
+          <text x="60" y="46" text-anchor="end" font-size="6.5" font-weight="600" fill="#475569">Chaves/Hardcode</text>
+          <rect x="65" y="37" width="130" height="11" fill="#ea580c" rx="2" />
+          <text x="200" y="46" font-size="7" font-weight="bold" fill="#ea580c">3</text>
+
+          <text x="60" y="70" text-anchor="end" font-size="6.5" font-weight="600" fill="#475569">IDOR</text>
+          <rect x="65" y="61" width="45" height="11" fill="#d97706" rx="2" />
+          <text x="115" y="70" font-size="7" font-weight="bold" fill="#d97706">1</text>
+
+          <text x="60" y="94" text-anchor="end" font-size="6.5" font-weight="600" fill="#475569">Isolamento</text>
+          <rect x="65" y="85" width="45" height="11" fill="#d97706" rx="2" />
+          <text x="115" y="94" font-size="7" font-weight="bold" fill="#d97706">1</text>
+
+          <text x="60" y="118" text-anchor="end" font-size="6.5" font-weight="600" fill="#475569">Inputs/SQLi</text>
+          <rect x="65" y="109" width="45" height="11" fill="#2563eb" rx="2" />
+          <text x="115" y="118" font-size="7" font-weight="bold" fill="#2563eb">1</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Pontos Fortes e Pontos Fracos -->
+    <div class="grid-2 avoid-break">
+      <div class="box-green">
+        <h4>🛡️ Pontos Fortes Verificados</h4>
+        <ul style="margin-left: 15px; margin-top: 3px;">
+          <li><strong>Barreira Zero-Trust Central:</strong> <code>api/index.php</code> bloqueia 100% das rotas sem autenticação via <code>Auth::requireAuth()</code>.</li>
+          <li><strong>RBAC Seguro em Usuários:</strong> <code>UsuarioController.php</code> valida <code>Auth::requireRole('admin')</code> para criação e exclusão.</li>
+          <li><strong>Proteção Nativa XSS:</strong> React JSX escapa automaticamente variáveis no DOM sem <code>dangerouslySetInnerHTML</code>.</li>
+          <li><strong>Sanitização em WhatsApp:</strong> <code>AbaPassageiros.jsx</code> aplica regex <code>\D</code> impedindo esquemas <code>javascript:</code>.</li>
+        </ul>
+      </div>
+
+      <div class="box-red">
+        <h4>⚠️ Principais Riscos e Fragilidades</h4>
+        <ul style="margin-left: 15px; margin-top: 3px;">
+          <li><strong>Exclusão de Viagens sem Gate Admin:</strong> Operadores comuns podem disparar <code>DELETE /?resource=viagens&id=X</code> e apagar viagens em cascata.</li>
+          <li><strong>Credenciais de Banco em Código:</strong> Senha do MySQL gravada em <code>api/config/database.php</code> e <code>update_db.cjs</code>.</li>
+          <li><strong>Log de Debug Aberto em Disco:</strong> <code>ViagemController.php</code> grava payloads em <code>log_update.txt</code> acessível via HTTP.</li>
+          <li><strong>Interpolação SQL em Array:</strong> <code>PassageiroController.php</code> concatena IDs diretamente na query SQL.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TABELA DE ACHADOS ==================== -->
+  <div class="page-break">
+    <div class="doc-header">
+      <span class="brand">TrevoTour Security Audit</span>
+      <span class="doc-type">Tabela de Achados</span>
+    </div>
+
+    <h2 class="section-title">📋 Tabela Geral de Achados</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 14%;">Severidade</th>
+          <th style="width: 24%;">Categoria</th>
+          <th style="width: 26%;">Localização</th>
+          <th style="width: 36%;">Descrição Sintética</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="chip chip-alta">ALTA</span></td>
+          <td>Permissão no Servidor</td>
+          <td><code>api/controllers/ViagemController.php:196</code></td>
+          <td>Exclusão de viagens e dados em cascata permitida para operadores sem perfil admin.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-alta">ALTA</span></td>
+          <td>Chaves Expostas</td>
+          <td><code>api/config/database.php:11-12</code></td>
+          <td>Credenciais de banco MySQL hardcoded sem variáveis de ambiente (.env).</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-media">MÉDIA</span></td>
+          <td>Permissão no Servidor</td>
+          <td><code>api/controllers/DespesaController.php:126</code></td>
+          <td>Exclusão de lançamentos contábeis/despesas permitida para operadores comuns.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-media">MÉDIA</span></td>
+          <td>Chaves Expostas</td>
+          <td><code>api/controllers/ViagemController.php:134</code></td>
+          <td>Escrita de payload de requisições em <code>log_update.txt</code> exposto na web.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-media">MÉDIA</span></td>
+          <td>IDOR / Isolamento</td>
+          <td><code>api/controllers/PassageiroController.php:141</code></td>
+          <td>Manipulação e estorno de créditos em passageiros sem verificação de escopo de posse.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-baixa">BAIXA</span></td>
+          <td>Inputs / SQLi</td>
+          <td><code>api/controllers/PassageiroController.php:31-36</code></td>
+          <td>Interpolação direta de variável em cláusula SQL IN() sem prepared statement.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-baixa">BAIXA</span></td>
+          <td>Chaves Expostas</td>
+          <td><code>api/config/database.php:41-46</code></td>
+          <td>Exposição de mensagem de erro PDO detalhada em JSON no caso de falha de conexão.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">🔍 Detalhamento Técnico dos Achados</h2>
+
+    <!-- Achado 1 -->
+    <div class="finding-card">
+      <div class="finding-header">
+        <span class="finding-title">1. Exclusão de Viagens Permitida para Operadores Comuns</span>
+        <span class="chip chip-alta">ALTA</span>
+      </div>
+      <div class="finding-field"><strong>Arquivo & Linha:</strong> <code>api/controllers/ViagemController.php:196-200</code></div>
+      <div class="finding-field"><strong>Categoria:</strong> Permissão Definida no Navegador / Falta de RBAC no Servidor</div>
+      <div class="code-snippet">// api/controllers/ViagemController.php (Linhas 196-200)
+public function destroy(int $id): void {
+    $stmt = $this->db->prepare("DELETE FROM viagens WHERE id = ?");
+    $stmt->execute([$id]);
+    jsonResponse(true, null, 'Viagem excluída com sucesso');
+}</div>
+      <p class="finding-field"><strong>Por que é explorável:</strong> Qualquer usuário com perfil <code>usuario</code> autenticado na API pode enviar uma requisição HTTP DELETE para <code>/?resource=viagens&id=X</code>. Como o método não executa <code>Auth::requireRole('admin')</code>, o registro é deletado no banco em cascata, apagando passageiros, parcelas e históricos vinculados.</p>
+    </div>
+
+    <!-- Achado 2 -->
+    <div class="finding-card">
+      <div class="finding-header">
+        <span class="finding-title">2. Credenciais de Banco de Dados Hardcoded</span>
+        <span class="chip chip-alta">ALTA</span>
+      </div>
+      <div class="finding-field"><strong>Arquivo & Linha:</strong> <code>api/config/database.php:8-13</code> e <code>frontend/update_db.cjs:3</code></div>
+      <div class="finding-field"><strong>Categoria:</strong> Chaves Expostas / Hardcode de Segredos</div>
+      <div class="code-snippet">// api/config/database.php (Linhas 8-13)
+define('DB_HOST', '127.0.0.1');
+define('DB_NAME', 'trevotour_db');
+define('DB_USER', 'trevotour');
+define('DB_PASS', 'trevotour123'); // Senha em texto puro no código</div>
+      <p class="finding-field"><strong>Por que é explorável:</strong> A senha de produção/desenvolvimento do banco está fixada no repositório. Em caso de commit público ou vazamento do código-fonte, o invasor obtém credenciais diretas do MySQL.</p>
+    </div>
+  </div>
+
+  <!-- ==================== DETALHAMENTO CONTINUAÇÃO ==================== -->
+  <div class="page-break">
+    <div class="doc-header">
+      <span class="brand">TrevoTour Security Audit</span>
+      <span class="doc-type">Detalhamento Técnico</span>
+    </div>
+
+    <!-- Achado 3 -->
+    <div class="finding-card">
+      <div class="finding-header">
+        <span class="finding-title">3. Escrita de Log de Debug em Arquivo Público no Filesystem</span>
+        <span class="chip chip-media">MÉDIA</span>
+      </div>
+      <div class="finding-field"><strong>Arquivo & Linha:</strong> <code>api/controllers/ViagemController.php:134</code></div>
+      <div class="finding-field"><strong>Categoria:</strong> Chaves Expostas / Vazamento de Informações Sensíveis</div>
+      <div class="code-snippet">// api/controllers/ViagemController.php (Linha 134)
+public function update(int $id): void {
+    $data = getJsonInput();
+    file_put_contents(__DIR__ . '/log_update.txt', json_encode($data));
+    ...</div>
+      <p class="finding-field"><strong>Por que é explorável:</strong> A cada atualização de viagem, o payload JSON completo é escrito em <code>api/controllers/log_update.txt</code>. Se o servidor web (Apache/Nginx) servir arquivos estáticos desse diretório, um atacante não autenticado pode baixar o arquivo e obter dados cadastrais de viagens e passageiros.</p>
+    </div>
+
+    <!-- Achado 4 -->
+    <div class="finding-card">
+      <div class="finding-header">
+        <span class="finding-title">4. Exclusão e Estorno de Despesas Financeiras sem Permissão Admin</span>
+        <span class="chip chip-media">MÉDIA</span>
+      </div>
+      <div class="finding-field"><strong>Arquivo & Linha:</strong> <code>api/controllers/DespesaController.php:126-145</code> e <code>CreditoController.php:85-108</code></div>
+      <div class="finding-field"><strong>Categoria:</strong> Permissão Definida no Navegador / Controle de Acesso</div>
+      <div class="code-snippet">// api/controllers/DespesaController.php (Linhas 126-133)
+public function destroy(int $id): void {
+    ...
+    $stmt = $this->db->prepare("DELETE FROM despesas_viagem WHERE id = ?");
+    $stmt->execute([$id]);
+    jsonResponse(true, null, 'Despesa excluída com sucesso');
+}</div>
+      <p class="finding-field"><strong>Por que é explorável:</strong> Registros contábeis e de despesas de viagens podem ser permanentemente excluídos por operadores comuns via <code>DELETE /?resource=despesas&id=X</code> sem rastro de aprovação administrativa.</p>
+    </div>
+
+    <!-- Achado 5 -->
+    <div class="finding-card">
+      <div class="finding-header">
+        <span class="finding-title">5. Interpolação Direta de IDs em Consulta SQL</span>
+        <span class="chip chip-baixa">BAIXA</span>
+      </div>
+      <div class="finding-field"><strong>Arquivo & Linha:</strong> <code>api/controllers/PassageiroController.php:31-36</code></div>
+      <div class="finding-field"><strong>Categoria:</strong> Inputs sem Tratamento / Prática SQL Insegura</div>
+      <div class="code-snippet">// api/controllers/PassageiroController.php (Linhas 31-36)
+$ids = implode(',', array_column($passageiros, 'id'));
+$parcStmt = $this->db->query("
+    SELECT * FROM parcelas_passageiro
+    WHERE passageiro_id IN ({$ids})
+    ORDER BY passageiro_id ASC, numero_parcela ASC
+");</div>
+      <p class="finding-field"><strong>Por que é explorável:</strong> O uso de <code>$this->db->query()</code> com interpolação de string <code>{$ids}</code> contorna o mecanismo de prepared statements. Caso a lista de IDs venha corrompida ou manipulada em refatorações futuras, introduz risco de injeção SQL.</p>
+    </div>
+
+    <!-- Recomendações Priorizadas -->
+    <h2 class="section-title">🎯 Recomendações Priorizadas de Correção</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 12%;">Prioridade</th>
+          <th style="width: 28%;">Ação Recomendada</th>
+          <th style="width: 60%;">Impacto e Justificativa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="chip chip-critica">P1</span></td>
+          <td>Proteger Métodos Destrutivos com <code>Auth::requireRole('admin')</code></td>
+          <td>Impede que operadores apaguem viagens, despesas e clientes sem autorização gerencial.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-alta">P2</span></td>
+          <td>Migrar Credenciais de Banco para <code>.env</code></td>
+          <td>Isola senhas do repositório Git e permite segredos distintos por ambiente (dev/prod).</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-media">P3</span></td>
+          <td>Remover Arquivos de Log em Disco (<code>log_update.txt</code>)</td>
+          <td>Elimina superfície de vazamento de dados em diretórios públicos da API.</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-baixa">P4</span></td>
+          <td>Parametrizar Cláusula SQL <code>IN()</code></td>
+          <td>Substituir interpolação direta por placeholders dinâmicos <code>(?, ?, ?)</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== ISSUES DO GITHUB ==================== -->
+  <div class="page-break">
+    <div class="doc-header">
+      <span class="brand">TrevoTour Security Audit</span>
+      <span class="doc-type">Issues para o GitHub</span>
+    </div>
+
+    <h2 class="section-title">🐙 Issues Prontas para o GitHub</h2>
+    <p>Abaixo estão os modelos de issues em Markdown prontos para copiar e colar diretamente no GitHub Issues do repositório:</p>
+
+    <!-- ISSUE 1 -->
+    <div class="issue-box">
+      <strong>--- ISSUE 1 ---</strong>
+      <pre>
+### Título: [Segurança] Bloquear exclusão de viagens por usuários sem perfil Administrador
+
+**Labels:** `security`, `severity: high`, `backend`, `rbac`
+
+#### Descrição do Problema
+O endpoint de exclusão de viagens (`DELETE /?resource=viagens&id=X`) não valida se o usuário autenticado possui o cargo de `admin`. Usuários com papel de operador comum (`role = 'usuario'`) conseguem invocar a rota diretamente e apagar excursões inteiras do banco de dados, excluindo passageiros e histórico em cascata.
+
+#### Evidência
+- **Arquivo:** `api/controllers/ViagemController.php:196-200`
+```php
+public function destroy(int $id): void {
+    $stmt = $this->db->prepare("DELETE FROM viagens WHERE id = ?");
+    $stmt->execute([$id]);
+    jsonResponse(true, null, 'Viagem excluída com sucesso');
+}
+```
+
+#### Impacto
+Perda irreversível de dados operacionais e financeiros da agência por ação indevida ou maliciosa de contas não privilegiadas.
+
+#### Sugestão de Correção
+Adicionar a chamada `Auth::requireRole('admin');` no início dos métodos `destroy()` de `ViagemController.php`, `DespesaController.php` e `ClienteController.php`.
+
+#### Critérios de Aceite
+- [ ] Requisição `DELETE /?resource=viagens&id=X` com usuário `role: 'usuario'` retorna HTTP 403 Forbidden.
+- [ ] Requisição `DELETE /?resource=viagens&id=X` com usuário `role: 'admin'` executa a exclusão normalmente.
+      </pre>
+      <strong>--- FIM ISSUE 1 ---</strong>
+    </div>
+
+    <!-- ISSUE 2 -->
+    <div class="issue-box">
+      <strong>--- ISSUE 2 ---</strong>
+      <pre>
+### Título: [Segurança] Mover credenciais de banco de dados para variáveis de ambiente (.env)
+
+**Labels:** `security`, `severity: high`, `configuration`, `hardening`
+
+#### Descrição do Problema
+As credenciais de conexão ao MySQL estão fixadas no código-fonte em texto plano nos arquivos `api/config/database.php` e `frontend/update_db.cjs`.
+
+#### Evidência
+- **Arquivo:** `api/config/database.php:8-13`
+```php
+define('DB_HOST', '127.0.0.1');
+define('DB_USER', 'trevotour');
+define('DB_PASS', 'trevotour123');
+```
+
+#### Impacto
+Vazamento de credenciais do banco de dados caso o código seja commitado em repositório público ou compartilhado com terceiros.
+
+#### Sugestão de Correção
+1. Carregar variáveis via `$_ENV` ou arquivo `.env` fora do versionamento (`.gitignore`).
+2. Implementar fallback seguro e validação de inicialização que rejeite senhas vazias em produção.
+
+#### Critérios de Aceite
+- [ ] Nenhuma senha em texto claro presente em arquivos PHP ou JS versionados.
+- [ ] Arquivo `.env.example` fornecido como modelo para o time.
+      </pre>
+      <strong>--- FIM ISSUE 2 ---</strong>
+    </div>
+  </div>
+
+  <!-- ==================== ISSUES CONTINUAÇÃO ==================== -->
+  <div>
+    <div class="doc-header">
+      <span class="brand">TrevoTour Security Audit</span>
+      <span class="doc-type">Issues para o GitHub</span>
+    </div>
+
+    <!-- ISSUE 3 -->
+    <div class="issue-box">
+      <strong>--- ISSUE 3 ---</strong>
+      <pre>
+### Título: [Segurança] Remover escrita de arquivo de log em texto plano no diretório de controllers
+
+**Labels:** `security`, `severity: medium`, `privacy`, `information-disclosure`
+
+#### Descrição do Problema
+O método `update()` do `ViagemController.php` grava todo o payload JSON de atualização no arquivo `api/controllers/log_update.txt`.
+
+#### Evidência
+- **Arquivo:** `api/controllers/ViagemController.php:134`
+```php
+$data = getJsonInput();
+file_put_contents(__DIR__ . '/log_update.txt', json_encode($data));
+```
+
+#### Impacto
+Vazamento de dados cadastrais e de viagens caso o servidor web sirva arquivos `.txt` diretamente a usuários não autenticados.
+
+#### Sugestão de Correção
+Remover a chamada `file_put_contents` de depuração ou direcionar logs para um diretório seguro fora da raiz web com permissões restritas.
+
+#### Critérios de Aceite
+- [ ] Remoção da linha de escrita em arquivo estático.
+- [ ] Arquivo `api/controllers/log_update.txt` excluído do projeto.
+      </pre>
+      <strong>--- FIM ISSUE 3 ---</strong>
+    </div>
+
+    <!-- ISSUE 4 -->
+    <div class="issue-box">
+      <strong>--- ISSUE 4 ---</strong>
+      <pre>
+### Título: [Segurança] Substituir interpolação direta de array por prepared statements em PassageiroController
+
+**Labels:** `security`, `severity: low`, `database`, `code-quality`
+
+#### Descrição do Problema
+O método `byViagem` em `PassageiroController.php` concatena a variável `$ids` diretamente no corpo da query SQL executada via `PDO::query()`.
+
+#### Evidência
+- **Arquivo:** `api/controllers/PassageiroController.php:31-36`
+```php
+$ids = implode(',', array_column($passageiros, 'id'));
+$parcStmt = $this->db->query("SELECT * FROM parcelas_passageiro WHERE passageiro_id IN ({$ids})");
+```
+
+#### Impacto
+Violação do padrão de segurança de prepared statements e risco potencial em manutenções futuras.
+
+#### Sugestão de Correção
+Gerar placeholders dinâmicos `implode(',', array_fill(0, count($idsArray), '?'))` e executar com `$parcStmt->execute($idsArray)`.
+
+#### Critérios de Aceite
+- [ ] Todas as consultas SQL utilizam `PDO::prepare()` com binding de parâmetros.
+      </pre>
+      <strong>--- FIM ISSUE 4 ---</strong>
+    </div>
+  </div>
+
+</body>
+</html>

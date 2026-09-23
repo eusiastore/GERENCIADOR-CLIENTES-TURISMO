@@ -1,0 +1,27 @@
+# Dependências
+node_modules/
+dist/
+dist-ssr/
+
+# Arquivos de Ambiente e Segredos
+.env
+.env.local
+.env.*.local
+*.log
+*.txt
+.DS_Store
+
+# Cloudflare & Wrangler Local State / Databases
+.wrangler/
+*.sqlite
+*.sqlite3
+*.db
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

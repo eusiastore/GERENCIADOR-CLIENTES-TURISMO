@@ -1,0 +1,25 @@
+{
+  "name": "trevotour-backend",
+  "version": "2.0.0",
+  "description": "Backend API para o Sistema TrevoTour em Cloudflare Workers + Hono + D1",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev --port 3001",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "db:init:local": "wrangler d1 execute trevotour-db --local --file=../database/schema-d1.sql",
+    "db:seed:local": "wrangler d1 execute trevotour-db --local --file=../database/seed-d1.sql",
+    "db:init:remote": "wrangler d1 execute trevotour-db --remote --file=../database/schema-d1.sql",
+    "db:seed:remote": "wrangler d1 execute trevotour-db --remote --file=../database/seed-d1.sql"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "@types/bcryptjs": "^2.4.6",
+    "typescript": "^5.7.2",
+    "wrangler": "^3.99.0"
+  }
+}

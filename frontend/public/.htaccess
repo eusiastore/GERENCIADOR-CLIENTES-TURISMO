@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Não intercepta chamadas à pasta /api
+  RewriteRule ^api/ - [L]
+
+  # 2. Se o arquivo ou diretório real existir, serve direto (css, js, imagens)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 3. Qualquer outra rota é entregue ao React (Single Page Application)
+  RewriteRule ^ index.html [L]
+</IfModule>

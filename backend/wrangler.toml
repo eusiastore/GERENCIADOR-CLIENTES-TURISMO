@@ -1,0 +1,14 @@
+name = "trevotour-api"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+JWT_SECRET = "trevotour_jwt_secret_change_in_production"
+JWT_EXPIRES_IN = "7d"
+CORS_ORIGIN = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "trevotour-db"
+database_id = "trevotour-db-id"
