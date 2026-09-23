@@ -10,5 +10,5 @@ CORS_ORIGIN = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000
 
 [[d1_databases]]
 binding = "DB"
-database_name = "trevotour-db"
-database_id = "trevotour-db-id"
+database_name = "trevotour_db"
+database_id = "c257065e-2552-4b22-8604-ceea24d26e3e"

@@ -7,10 +7,10 @@
     "dev": "wrangler dev --port 3001",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "db:init:local": "wrangler d1 execute trevotour-db --local --file=../database/schema-d1.sql",
-    "db:seed:local": "wrangler d1 execute trevotour-db --local --file=../database/seed-d1.sql",
-    "db:init:remote": "wrangler d1 execute trevotour-db --remote --file=../database/schema-d1.sql",
-    "db:seed:remote": "wrangler d1 execute trevotour-db --remote --file=../database/seed-d1.sql"
+    "db:init:local": "wrangler d1 execute trevotour_db --local --file=../database/schema-d1.sql",
+    "db:seed:local": "wrangler d1 execute trevotour_db --local --file=../database/seed-d1.sql",
+    "db:init:remote": "wrangler d1 execute trevotour_db --remote --file=../database/schema-d1.sql",
+    "db:seed:remote": "wrangler d1 execute trevotour_db --remote --file=../database/seed-d1.sql"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
